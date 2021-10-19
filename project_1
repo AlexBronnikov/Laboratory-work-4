@@ -1,0 +1,114 @@
+// LabRab 4.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+// Бронников Алексей   9 Вариант
+// Дана матрица размером NxM. Упорядочить ее столбцы по возрастанию их наименьших элементов.
+#include <iostream>
+using namespace std;
+
+int N, M;
+
+void InitializationMatrix(int**& matrix);
+void ReadMatrix(int**& matrix);
+void WriteMatrix(int**& matrix);
+void SortMarrix(int**& matrix);
+void ClearMemory(int**& matrix);
+
+int main()
+{
+    setlocale(LC_ALL, "ru");
+
+    cout << "Введите размер матрицы: NxM\n     N - Высота:\n     M - Широта:\n";
+    cin >> N >> M;
+
+    int** matrix;
+    InitializationMatrix(matrix);
+
+    cout << "Введите матрицу:\n";
+    ReadMatrix(matrix);
+
+    cout << "\nИсходная матрица:\n";
+    WriteMatrix(matrix);
+
+    SortMarrix(matrix);
+
+    cout << "\nВыходная матрица:\n";
+    WriteMatrix(matrix);
+
+    ClearMemory(matrix);
+    cin >> N;
+}
+
+void InitializationMatrix(int**& matrix)
+{
+    matrix = new int* [N];
+    for (int i = 0; i < N; i++)matrix[i] = new int[M];
+}
+void ReadMatrix(int**& matrix)
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cin >> matrix[i][j];
+        }
+    }
+}
+void WriteMatrix(int**& matrix)
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+void SortMarrix(int**& matrix)
+{
+    int* matrix_min = new int[M];
+    int** delta;
+    InitializationMatrix(delta);
+
+    for (int j = 0; j < M; j++)
+    {
+        int min = matrix[0][j];
+        for (int i = 1; i < N; i++)
+        {
+            if (min > matrix[i][j])min = matrix[i][j];
+        }
+        matrix_min[j] = min;
+    }
+
+    for (int j = 0; j < M; j++)
+    {
+        int n = 0;
+        for (int i = 0; i < M; i++)
+        {
+            if ((matrix_min[j] > matrix_min[i]) || ((matrix_min[j] == matrix_min[i]) && (j > i))) n++;
+        }
+        for (int i = 0; i < N; i++)
+        {
+            delta[i][n] = matrix[i][j];
+        }
+    }
+
+    ClearMemory(matrix);
+    delete matrix_min;
+    matrix = delta;
+}
+void ClearMemory(int**& matrix)
+{
+    for (int i = 0; i < N; i++)delete matrix[i];
+    delete matrix;
+}
+
+// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
+// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+
+// Советы по началу работы 
+//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
+//   2. В окне Team Explorer можно подключиться к системе управления версиями.
+//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
+//   4. В окне "Список ошибок" можно просматривать ошибки.
+//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
+//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
